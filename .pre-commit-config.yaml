@@ -1,0 +1,29 @@
+repos:
+-   repo: https://github.com/ambv/black
+    rev: stable
+    hooks:
+    - id: black
+      language_version: python3.6
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v1.2.3
+    hooks:
+    -   id: trailing-whitespace
+        exclude: \.(css|ts|tsx|bck|csv)$
+    -   id: check-merge-conflict
+    -   id: check-json
+    -   id: debug-statements
+    -   id: pretty-format-json
+        args: ["--autofix"]
+    -   id: check-added-large-files
+        args: [--maxkb=500]
+    -   id: flake8
+        args: ["--max-line-length=131", "--ignore=W503,E203"]
+        exclude: (tests/.*|.*/migrations/.*\.py|.*/custom_dictionaries.py|scripts/post_deployment/.*\.py)$
+    -   id: flake8
+        name: Flake8 migrations
+        args: ["--ignore=N806,E501,W503", "--max-line-length=131"]
+        files: (.*/migrations/.*\.py)$
+    -   id: flake8
+        name: Flake8 tests
+        args: ["--ignore=F811,W503", "--max-line-length=131"]
+        files: (tests/.*\.py)$

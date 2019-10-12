@@ -1,0 +1,84 @@
+{% extends 'authenticate/base.html' %}
+
+{% block content %}
+
+
+{% if user.is_authenticated %}
+	{% if is_admin %}
+		<h2 class="text-center"> Loan Applied Status</h2>
+		<div class="col-md-6 offset-md-3">
+			<table class="table">
+			  <thead>
+				<tr>
+					<th scope="col">Loan ID</th>
+					<th scope="col">User</th>
+					<th scope="col">Amount</th>
+					<th scope="col">Tenure</th>
+					<th scope="col">Status</th>
+					<th scope="col">Applied On</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				{% for loan in applied_loans %}
+					<tr>
+						<td><a href="{% url 'authenticate:loan_status' loan_id=loan.id %}">{{ loan.id }}</a></td>
+						<td>{{ loan.user.first_name }} {{ loan.user.last_name }}</td>
+						<td>{{ loan.amount }}</td>
+						<td>{{ loan.tenure }} months</td>
+						<td>{{ loan.status }}</td>
+						<td>{{ loan.created_date }}</td>
+					</tr>
+				{% endfor %}
+			  </tbody>
+			</table>
+		</div>
+	{% else %}
+		{% if already_applied %}
+			<h2 class="text-center"> Loan Applied Status</h2>
+			<div class="col-md-6 offset-md-3">
+				<table class="table">
+				  <thead>
+				    <tr>
+				      <th scope="col">Amount</th>
+				      <th scope="col">Tenure</th>
+				      <th scope="col">Status</th>
+				      <th scope="col">Applied On</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+					{% for loan in applied_loans %}
+						<tr>
+							<td>{{ loan.amount }}</td>
+							<td>{{ loan.tenure }} months</td>
+							<td>{{ loan.status }}</td>
+							<td>{{ loan.created_date }}</td>
+						</tr>
+					{% endfor %}
+				  </tbody>
+				</table>
+			</div>
+		{% endif %}
+
+		<br>
+		<h2 class="text-center">Apply for new Loan</h2>
+		<div class="col-md-6 offset-md-3">
+			<form method="POST" action="{% url 'authenticate:loan_application' %}">
+				{% csrf_token %}
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Enter Principle Amount" name="loan_amount" required="">
+				</div>
+				<div class="form-group">
+					<input type="text" class="form-control" placeholder="Enter Loan Tenure in months" name="tenure" required>
+				</div>
+				<button type="submit" class="btn btn-secondary">Submit</button>
+			</form>
+		</div>
+	{% endif %}
+
+
+{% else %}
+	<h1>Please Login to apply for loan </h1>
+{% endif %}
+
+
+{% endblock %}

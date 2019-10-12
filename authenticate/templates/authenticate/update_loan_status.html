@@ -1,0 +1,43 @@
+{% extends 'authenticate/base.html' %}
+
+{% block content %}
+
+
+<div class="col-md-12 offset-md-0">
+	<table class="table">
+	  <thead>
+		<tr>
+			<th scope="col">Loan ID</th>
+			<th scope="col">User</th>
+			<th scope="col">Amount</th>
+			<th scope="col">Tenure</th>
+			<th scope="col">Status</th>
+			<th scope="col">Applied On</th>
+		</tr>
+	  </thead>
+	  <tbody>
+		<tr>
+			<td><a href="{% url 'authenticate:loan_status' loan_id=loan.id %}">{{ loan.id }}</a></td>
+			<td>{{ loan.user.first_name }} {{ loan.user.last_name }}</td>
+			<td>{{ loan.amount }}</td>
+			<td>{{ loan.tenure }} months</td>
+			<td>{{ loan.status }}</td>
+			<td>{{ loan.created_date }}</td>
+		</tr>
+	  </tbody>
+	</table>
+</div>
+<form method="POST" action="{% url 'authenticate:loan_status' loan_id=loan.id %}">
+	{% csrf_token %}
+	<label>Select New Loan Status</label>
+	<div class="form-group">
+		<select class="form-control" id="newStatus" name="new_status">
+      		<option>Approve</option>
+      		<option>Reject</option>
+      		<option>Disburse</option>
+      	</select>
+	</div>
+	<button type="submit" class="btn btn-secondary">Submit</button>
+</form>
+
+{% endblock %}
